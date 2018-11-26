@@ -1,0 +1,19 @@
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+
+
+.w3-circle {
+    height:106px;
+    width:106px;
+}
+
+.w3-left w3-circle w3-margin-right {
+    width:60px;
+}
+
+#Forest {
+    width:100%;
+}
+
+#Avatar {
+    width:50%;
+}

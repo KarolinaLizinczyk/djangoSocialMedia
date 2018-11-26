@@ -1,0 +1,271 @@
+{% extends "includes/base.html" %}
+
+{% block content %}
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card-2 w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">My Profile</h4>
+         <hr>
+         {% if updated_user2.photo %}
+         <p class="w3-center"><img src="{{ updated_user2.photo.url}}" class="w3-circle" style="width: 100px; height: 100px;"></p>
+          {% endif %}
+         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{ updated_user.first_name }}</p>
+         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> {{ updated_user2.job}}</p>
+         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> {{ updated_user2.city}}</p>
+         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> {{ my_current_user.b_day }}</p>
+         <hr>
+         <a href="/account/profile/update/{{user_id}}">
+           <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" style="background-color:#7d97a5 !important">Edit Profile</button>
+         </a>
+        </div>
+      </div>
+      <br>
+      <!-- Accordion -->
+      <div class="w3-card-2 w3-round">
+        <div class="w3-white">
+          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
+          <div id="Demo1" class="w3-hide w3-container">
+            <p>Some text..</p>
+          </div>
+          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events</button>
+          <div id="Demo2" class="w3-hide w3-container">
+            <p>Some other text..</p>
+          </div>
+          <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Photos</button>
+          <div id="Demo3" class="w3-hide w3-container">
+         <div class="w3-row-padding">
+         <br>
+           <div class="w3-half">
+             <img src="/w3images/lights.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="/w3images/mountains.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="/w3images/forest.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="/w3images/fjords.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+         </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="w3-card-2 w3-round w3-white w3-hide-small">
+        <div class="w3-container">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Add your interests here </h6>
+              <p></p>
+              <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+
+                  <input style="margin-bottom: 15px" class="w3-border w3-padding" type="text" name="name" placeholder="name">
+                  <br>
+                  <input class="w3-border w3-padding w3-input" type="text" name="category" placeholder="category">
+                  <!--<p contenteditable="true" class="w3-border w3-padding" name="text">Status: Feeling Blue</p>-->
+                  <br>
+                  <input type="file" name="img">
+                  <button style="margin-top: 20px" type="submit" class="w3-button w3-theme"><i class="fa fa-plus"></i>  Save</button>
+              </form>
+            </div>
+        </div>
+        <br>
+      </div>
+      <br>
+      <!-- Interests -->
+      <div class="w3-card-2 w3-round w3-white w3-hide-small">
+        <div class="w3-container">
+          <p>Interests</p>
+          <p>
+            <div class="w3-row">
+            {% for interest in interests %}
+
+              <div class="w3-card-4 w3-center w3-col" style="width: 120px; height: 170px; margin: 5px;">
+                {% if interest.img %}
+                <img src="{{interest.img.url}}" style="width: 120px; height: 90px;">
+                {% endif %}
+                <div class="w3-container w3-center">
+                  <br><span>{{ interest.name }} <br>{{ interest.category }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          </p>
+        </div>
+      </div>
+      <br>
+
+      <!-- Alert Box -->
+      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+          <i class="fa fa-remove"></i>
+        </span>
+        <p><strong>Hey!</strong></p>
+        <p>People are looking at your profile. Find out who.</p>
+        {% for user in users %}
+        <p>{{ user.username }}</p>
+        {% if user not in friends %}
+        <a href="{% url 'social:change_friends' operation='add' pk=user.pk %}">
+        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" style="background-color:#7d97a5 !important">Add Friend</button>
+        </a>
+        {% endif %}
+        {% endfor %}
+        <br>
+      </div>
+      <hr>
+
+
+
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Middle Column -->
+    <div class="w3-col m7">
+
+      <div class="w3-row-padding">
+        <div class="w3-col m12">
+          <div class="w3-card-2 w3-round w3-white">
+            <form method="POST" action="">{% csrf_token %}
+              <div class="w3-container w3-padding">
+                <h6 class="w3-opacity">Social Media template by w3.css</h6>
+                <input style="margin-bottom: 15px" class="w3-border w3-padding" type="text" name="title" placeholder="title">
+                <br>
+                <input class="w3-border w3-padding w3-input" type="text" name="text" placeholder="Status: Feeling Blue">
+                <!--<p contenteditable="true" class="w3-border w3-padding" name="text">Status: Feeling Blue</p>-->
+                <button style="margin-top: 15px; margin-bottom: 10px" type="submit" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button>
+              </div>
+            </form>
+        </div>
+      </div>
+
+      </div>
+      {% for post in post_list %}
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        {% if updated_user2.photo %}
+        <img src="{{ updated_user2.photo.url}}" style="width: 50px; height: 50px;" class="w3-left w3-circle w3-margin-right">
+        {% endif %}
+        <span class="w3-right w3-opacity">1 min</span>
+        <h4>{{ updated_user.first_name }}</h4><br>
+        <hr class="w3-clear">
+        <p><a href="/account/article/{{post.id}}" class="btn btn-primary" role="button">{{ post.title }}</a></p><br>
+        <p>{{ post.text }}</p>
+          <div class="w3-row-padding" style="margin:0 -16px">
+            <div class="w3-half">
+              <img src="{{ post.img }}" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
+            </div>
+            <div class="w3-half">
+              <img src="/w3images/nature.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
+          </div>
+        </div>
+        <form method="post" action="/create_comment">{% csrf_token %}
+          <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" ng-click="clicked()"><i class="fa fa-thumbs-up"></i>Like // count //</button>
+          <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i> {{ post.comments.count}} Comments</button>
+          <hr>
+          {% for comment in post.comments.all %}
+          <p>{{ comment.created  }}</p>
+          {% if updated_user2.photo %}
+          <p><img src="{{ comment.profile.photo.url }}" class="w3-circle" style="width:35px; height:35px;"><span> {{ comment.user.first_name }}</span><p>
+          {% endif %}
+          <p>{{ comment.body }}</p>
+          <hr>
+          {% endfor %}
+          <h6 class="w3-opacity"> Add a Comment</h6>
+          <textarea class="w3-input w3-border" name="body"></textarea>
+          <input type="hidden" name="post" value="{{ post.id }}">
+          <button style="margin-top: 20px" type="submit" class="w3-button w3-theme">Add Comment</button>
+          <p></p>
+        </form>
+      </div>
+      {% endfor %}
+       <!-- Pagination -->
+      <div class="w3-bar"><center>
+        <div style="padding-bottom: 10px" class="w3-bar w3-light-grey">
+          <div>
+            {% if post_list.has_previous %}
+            <a class="w3-bar-item w3-button w3-dark-grey"  style="margin-left: 325px; margin-top: 10px;" href="?{{ page_request_var }}={{ post_list.previous_page_number }}">&larr; Newer</a>
+            {% endif %}
+          </div>
+          <div>
+            {% if post_list.has_next %}
+            <a class="w3-bar-item w3-button w3-dark-grey"  style="margin-left: 325px; " href="?{{ page_request_var }}={{ post_list.next_page_number }}">Older &rarr;</a>
+            {% endif %}
+          </div>
+        </div>
+        </center>
+      </div>
+      <p>&nbsp;</p>
+
+
+    <!-- End Middle Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-col m2">
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Upcoming Events:</p>
+          <img src="/w3images/forest.jpg" alt="Forest" id="Forest">
+          <p><strong>Holiday</strong></p>
+          <p>Friday 15:00</p>
+          <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
+        </div>
+      </div>
+      <br>
+
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Friend Request</p>
+          <img src="/w3images/avatar6.png" id="Avatar"><br>
+          <span>Jane Doe</span>
+          <div class="w3-row w3-opacity">
+            <div class="w3-half">
+              <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
+            </div>
+            <div class="w3-half">
+              <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
+        <p><strong>Friends</strong></p>
+        {% for friend in friends %}
+        <a href="/account/friend_profile/{{friend.id}}">
+        <p>{{ friend.username }}</p>
+        <a>
+         <a href="{% url 'social:change_friends' operation='remove' pk=friend.pk %}">
+        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom" style="background-color:#7d97a5 !important">Remove Friend</button>
+        </a>
+        {% endfor %}
+      </div>
+      <br>
+
+      <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
+        <p><i class="fa fa-bug w3-xxlarge"></i></p>
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+
+  <!-- End Grid -->
+  </div>
+
+<!-- End Page Container -->
+</div>
+<br>
+{% endblock content %}
+

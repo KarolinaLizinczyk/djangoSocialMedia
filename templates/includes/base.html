@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="myCtrl">
+    <title>FacePurrBook</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/static/css/bootstrap1.css">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src= "/static/js/app/app.module.js"></script>
+    <script src= "/static/js/app/app.config.js"></script>
+    <script src= "/static/js/app/controller/app-button.module.js"></script>
+    <script src= "/static/js/app/controller/app-button.ctrl.js"></script>
+    <body class="w3-theme-l5">
+
+    <!-- Navigation -->
+    {% if user.is_authenticated %}
+    {% include "includes/_navbar.html" %}
+
+    <!--nav -->
+    {% else %}
+    <!-- Navigation -->
+    {% include "includes/_navbar2.html" %}
+
+    <!--nav -->
+    {% endif %}
+
+    <!-- Container-->
+    {% block content %}
+    {% endblock %}
+    <!-- /.container -->
+
+    <!-- Footer-->
+    {% include "includes/_footer.html" %}
+    <!--footer -->
+
+    <script src="/static/js/bootstrap1.js"></script>
+
+    </body>
+</html>
